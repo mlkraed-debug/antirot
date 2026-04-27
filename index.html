@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AntiRot | منصة التعافي الرقمي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* ستايل لجعل الموقع انسيابي وشيك */
+       body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    scroll-behavior: smooth;
+    /* ألوان متقاربة عشان الحركة تبان طبيعية */
+    background: linear-gradient(270deg, #1e293b, #2d3748, #1a202c);
+    background-size: 600% 600%;
+    /* زيادة المدة لـ 20 ثانية تخلي الحركة هادية جداً */
+    animation: moveGradient 20s ease-in-out infinite;
+    color: white;
+}
+
+        /* ده التعريف بتاع حركة الألوان، حطيه تحت الـ body علطول */
+        @keyframes moveGradient {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+}
+/* كود الفقاعة العائمة */
+.blob {
+    position: fixed; /* عشان تفضل عائمة وأنتِ بتنزلي تحت */
+    width: 400px;
+    height: 400px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
+    filter: blur(60px);
+    border-radius: 50%;
+    z-index: -1; /* عشان تكون خلف الكلام */
+    top: 10%;
+    left: -5%;
+    animation: float 15s infinite alternate ease-in-out;
+}
+
+@keyframes float {
+    from { transform: translate(0, 0) rotate(0deg); }
+    to { transform: translate(150px, 100px) rotate(30deg); }
+}
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            /* تأثير الزجاج */
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        /* تنسيق القسم الأول (الاختبار) */
+        #welcome-section {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+        }
+
+        /* تنسيق القسم الثاني (الحاسبة) */
+        #calculator-section {
+            background-color: #ffffff;
+            color: #1e293b;
+        }
+
+        /* تنسيق القسم الثالث (الرادار) */
+        #radar-section {
+            background-color: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .main-btn {
+            padding: 15px 40px;
+            font-size: 20px;
+            background-color: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .main-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        input {
+            padding: 12px;
+            font-size: 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            margin: 20px;
+            width: 250px;
+            text-align: center;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+<div class="blob"></div>
+
+    <section id="welcome-section">
+        <h1 style="font-size: 3rem; margin-bottom: 10px;">AntiRot</h1>
+        <p style="font-size: 1.5rem; opacity: 0.9;">استعيدي توازن عقلك من التشتت الرقمي</p>
+        <br>
+        <button class="main-btn" onclick="location.href='quiz.html'">ابدئي اختبار الـ ١٠ أسئلة</button>
+        <p style="margin-top: 50px; font-size: 0.9rem;">انزلي للأسفل لاستكشاف المزيد ↓</p>
+    </section>
+
+    <section id="calculator-section">
+        <h2 style="font-size: 2.5rem;">١. حاسبة العمر المفقود</h2>
+        <p>كم ساعة تقضينها يومياً في التصفح العشوائي (TikTok, Reels, Shorts)؟</p>
+        
+        <input type="number" id="hoursInput" placeholder="أدخلي عدد الساعات">
+        <br>
+        <button class="main-btn" style="background-color: #0f172a;" onclick="calculateTime()">احسبي الضياع</button>
+        
+        <div id="calcResult" class="result-box"></div>
+    </section>
+
+    <section id="radar-section">
+        <h2 style="font-size: 2.5rem; margin-bottom: 10px;">٢. رادار كيمياء الدماغ</h2>
+        <p style="color: #cbd5e1; max-width: 600px;">اكتشفي كيف تؤثر نشاطاتك اليومية على مناطق اتخاذ القرار واللذة في عقلك</p>
+        
+        <div class="radar-container" style="display: flex; gap: 40px; align-items: center; flex-wrap: wrap; justify-content: center; margin-top: 30px;">
+            
+            <div class="controls" style="display: flex; flex-direction: column; gap: 15px;">
+                <button class="action-btn" onclick="updateBrain('doom', 'مركز المكافأة (Dopamine Center)')" style="background: #ef4444; color: white; border: none; padding: 15px 25px; border-radius: 15px; cursor: pointer; font-weight: bold; transition: 0.3s;">تصفح ريلز/تيك توك 📱 (إجهاد عصبي)</button>
+                <button class="action-btn" onclick="updateBrain('focus', 'الفص الجبهي (Prefrontal Cortex)')" style="background: #22c55e; color: white; border: none; padding: 15px 25px; border-radius: 15px; cursor: pointer; font-weight: bold; transition: 0.3s;">قراءة كتاب ورقي 📖 (تركيز عميق)</button>
+                <button class="action-btn" onclick="updateBrain('reset', 'إعادة ضبط')" style="background: #64748b; color: white; border: none; padding: 12px 25px; border-radius: 15px; cursor: pointer;">إعادة ضبط 🔄</button>
+            </div>
+
+            <div id="brain-visual" style="position: relative; width: 300px; height: 300px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.8s; border: 4px solid #cbd5e1; backdrop-filter: blur(5px);">
+                <span id="brain-emoji" style="font-size: 100px; z-index: 2;">🧠</span>
+                <div id="brain-glow" style="position: absolute; width: 100%; height: 100%; border-radius: 50%; filter: blur(40px); opacity: 0; transition: 0.8s;"></div>
+            </div>
+
+            <div id="status-panel" style="width: 280px; text-align: right; background: rgba(255,255,255,0.9); color: #1e293b; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                <h4 style="margin: 0; color: #1e293b; border-bottom: 2px solid #eee; padding-bottom: 5px;">تحليل النشاط:</h4>
+                <p id="brain-status" style="color: #475569; font-size: 0.95rem; margin-top: 15px;">انتظار اختيار النشاط...</p>
+                <div style="height: 12px; width: 100%; background: #e2e8f0; border-radius: 10px; margin-top: 10px; overflow: hidden;">
+                    <div id="dopamine-bar" style="height: 100%; width: 0%; background: #6366f1; transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);"></div>
+                </div>
+                <small style="display: block; margin-top: 5px; color: #64748b;">مستوى تدفق الدوبامين</small>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+        // ١. دالة حاسبة الوقت
+        function calculateTime() {
+            const hours = document.getElementById('hoursInput').value;
+            const resultDiv = document.getElementById('calcResult');
+            
+            if(hours > 0 && hours <= 24) {
+                const daysInYear = Math.round((hours * 365) / 24);
+                resultDiv.innerHTML = `أنتِ تفقدين حوالي ${daysInYear} يوماً كاملًا من عمرك سنوياً!<br><span style="color:#6366f1; font-size:16px;">*هذا الوقت يكفي لتعلم مهارة جديدة كلياً*</span>`;
+            } else {
+                resultDiv.innerHTML = "يرجى إدخال عدد ساعات صحيح";
+            }
+        }
+
+        // ٢. دالة رادار الدماغ (تأكدي أن السطر اللي تحت ده موجود)
+        function updateBrain(type, region) {
+    const brainVisual = document.getElementById('brain-visual');
+    const brainGlow = document.getElementById('brain-glow');
+    const statusText = document.getElementById('brain-status');
+    const dopamineBar = document.getElementById('dopamine-bar');
+    const emoji = document.getElementById('brain-emoji');
+
+    if (type === 'doom') {
+        brainVisual.style.borderColor = '#ef4444';
+        brainVisual.style.transform = 'scale(1.1)'; // تأثير نبض
+        brainGlow.style.background = '#ef4444';
+        brainGlow.style.opacity = '0.6';
+        statusText.innerHTML = `المنطقة النشطة: <br><b style="color:#ef4444">${region}</b><br><small>يتم استنزاف طاقة التركيز لصالح المتعة اللحظية.</small>`;
+        dopamineBar.style.width = '95%';
+        dopamineBar.style.background = '#ef4444';
+        emoji.innerText = '😵‍💫';
+    } else if (type === 'focus') {
+        brainVisual.style.borderColor = '#22c55e';
+        brainVisual.style.transform = 'scale(1.05)';
+        brainGlow.style.background = '#22c55e';
+        brainGlow.style.opacity = '0.5';
+        statusText.innerHTML = `المنطقة النشطة: <br><b style="color:#22c55e">${region}</b><br><small>يتم بناء وصلات عصبية جديدة وتقوية الذاكرة.</small>`;
+        dopamineBar.style.width = '25%';
+        dopamineBar.style.background = '#22c55e';
+        emoji.innerText = '🧘';
+    } else {
+        brainVisual.style.borderColor = '#cbd5e1';
+        brainVisual.style.transform = 'scale(1)';
+        brainGlow.style.opacity = '0';
+        statusText.innerText = 'انتظار اختيار النشاط...';
+        dopamineBar.style.width = '0%';
+        emoji.innerText = '🧠';
+    }
+}
+        
+        // ٣. دالة مولد البدائل
+        function generateSwap() {
+            const suggestions = [
+                "اشربي كوباً من الماء ببطء وتركيز 💧",
+                "قومي بترتيب مكتبك لمدة ٥ دقائق فقط 🧹",
+                "ارسمي أي شيء بسيط على ورقة خارجية 🎨",
+                "قومي بتمارين إطالة لجسمك 🧘",
+                "اقرئي صفحتين من كتاب ورقي 📖",
+                "اكتبي ٣ أشياء أنتِ ممتنة لها اليوم ✍️",
+                "تأملي من النافذة لمدة دقيقتين بدون جوال 🪟",
+                "قومي بتنظيف عدسة كاميرا جوالك بعناية ✨"
+            ];
+            const card = document.getElementById('swap-card');
+            const text = document.getElementById('suggestion-text');
+            const timer = document.getElementById('suggestion-timer');
+            card.style.transform = "scale(1.05)";
+            const randomIndex = Math.floor(Math.random() * suggestions.length);
+            text.innerText = suggestions[randomIndex];
+            timer.innerText = "التحدي لمدة: ١٠ دقائق";
+            setTimeout(() => { card.style.transform = "scale(1)"; }, 200);
+        }
+    </script>
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+        style="position: fixed; bottom: 20px; left: 20px; background: #6366f1; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 100;">
+    ↑
+</button>
+<footer style="padding: 40px; text-align: center; opacity: 0.7; font-size: 0.9rem;">
+    <p>تم تطوير AntiRot لزيادة الوعي الرقمي</p>
+    <small>"الدوبامين الرخيص هو العدو الأول للتركيز العميق"</small>
+</footer>
+</body>
+</html>

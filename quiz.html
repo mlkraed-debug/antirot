@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>اختبار مستوى التشتت الرقمي</title>
+    <style>
+        /* ستايل سريع لجعل الصفحة مرتبة */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f4f8; text-align: center; padding: 50px; }
+        .quiz-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); display: inline-block; width: 80%; max-width: 500px; }
+        .option-btn { background: #007bff; color: white; border: none; padding: 10px 20px; margin: 10px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        .option-btn:hover { background: #0056b3; }
+        #result-area { display: none; font-weight: bold; font-size: 20px; color: #2c3e50; }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-card">
+        <h2 id="question-text">السؤال ١: هل تفتحين جوالك فور الاستيقاظ من النوم؟</h2>
+        <div id="options">
+            <button class="option-btn" onclick="nextQuestion(true)">نعم</button>
+            <button class="option-btn" onclick="nextQuestion(false)">لا</button>
+        </div>
+        <p>السؤال <span id="q-number">1</span> من 10</p>
+
+        <div id="result-area">
+            <p id="final-score"></p>
+            <button class="option-btn" onclick="location.href='index.html'">العودة للرئيسية</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let score = 0;
+
+        const questions = [
+            "", // فراغ للسؤال الأول المكتوب في الـ HTML
+            "هل تشعرين بالتوتر إذا ابتعدتِ عن جوالك لمدة ساعة؟",
+            "هل تفتحين تطبيقات التواصل أثناء المذاكرة بشكل متكرر؟",
+            "هل تجدين صعوبة في إكمال فيديو أطول من دقيقتين؟",
+            "هل تستخدمين الجوال أثناء تناول الوجبات؟",
+            "هل تشعرين بملل شديد إذا لم يكن هناك إنترنت؟",
+            "هل يتأثر وقت نومك بسبب التمرير العشوائي (Scrolling)؟",
+            "هل تفتحين الجوال دون وجود إشعارات فعلية؟",
+            "هل تجدين صعوبة في التركيز على كتاب ورقي لمدة ١٥ دقيقة؟",
+            "هل تشعرين أن ذاكرتك أصبحت أضعف مؤخراً؟"
+        ];
+
+        function nextQuestion(isYes) {
+            if(isYes) score++;
+            
+            if (currentStep < 10) {
+                document.getElementById('question-text').innerText = "السؤال " + (currentStep + 1) + ": " + questions[currentStep];
+                currentStep++;
+                document.getElementById('q-number').innerText = currentStep;
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+    document.getElementById('question-text').style.display = 'none';
+    document.getElementById('options').style.display = 'none';
+    document.getElementById('q-number').parentElement.style.display = 'none';
+    
+    let resultHeader = "";
+    let recoveryPlan = "";
+    let color = "";
+
+    if(score <= 3) {
+        resultHeader = "المستوى: دماغ واعي (صحي) ✅";
+        color = "#22c55e";
+        recoveryPlan = `
+            <ul style="text-align: right; display: inline-block;">
+                <li>استمري على تقليل الإشعارات.</li>
+                <li>خصصي ساعة "بدون تقنية" قبل النوم.</li>
+                <li>مارسي هواية ورقية (رسم أو قراءة) مرة أسبوعياً.</li>
+            </ul>`;
+    } else if(score <= 7) {
+        resultHeader = "المستوى: بداية التشتت ⚠️";
+        color = "#f59e0b";
+        recoveryPlan = `
+            <ul style="text-align: right; display: inline-block;">
+                <li>امسحي التطبيقات الأكثر استهلاكاً لوقتك وعوضيها بالمتصفح.</li>
+                <li>طبقي قاعدة (20-20-20) لراحة عينك ودماغك.</li>
+                <li>استخدمي "مؤقت" (Timer) عند فتح وسائل التواصل.</li>
+            </ul>`;
+    } else {
+        resultHeader = "المستوى: تشتت حاد (Brain Rot) 🚨";
+        color = "#ef4444";
+        recoveryPlan = `
+            <ul style="text-align: right; display: inline-block;">
+                <li>صيام رقمي كامل لمدة ٢٤ ساعة في نهاية الأسبوع.</li>
+                <li>تفعيل خاصية "الشاشة الرمادية" في جوالك لتقليل الدوبامين.</li>
+                <li>البدء فوراً في استخدام (حاسبة العمر المفقود) في صفحتنا الرئيسية.</li>
+            </ul>`;
+    }
+
+    const resultArea = document.getElementById('result-area');
+    resultArea.style.display = 'block';
+    resultArea.innerHTML = `
+        <h2 style="color: ${color}">${resultHeader}</h2>
+        <p>درجة التشتت لديكِ: ${score * 10}%</p>
+        <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border-right: 5px solid ${color}">
+            <strong>خطة التعافي المقترحة لكِ:</strong><br>
+            ${recoveryPlan}
+        </div>
+        <br>
+        <button class="option-btn" onclick="location.href='index.html'">العودة للرئيسية لتطبيق الحلول</button>
+    `;
+}
+    </script>
+</body>
+</html>
