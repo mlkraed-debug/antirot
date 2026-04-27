@@ -27,22 +27,36 @@
     100% { background-position: 0% 50% }
 }
 /* كود الفقاعة العائمة */
+/* البلوب (الفقاعة) */
 .blob {
-    position: fixed; /* عشان تفضل عائمة وأنتِ بتنزلي تحت */
-    width: 400px;
-    height: 400px;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
-    filter: blur(60px);
-    border-radius: 50%;
-    z-index: -1; /* عشان تكون خلف الكلام */
-    top: 10%;
-    left: -5%;
-    animation: float 15s infinite alternate ease-in-out;
+    position: absolute; /* لازم absolute وليس fixed */
+    top: -100px; /* ارفعيها لفوق عشان تظهر في البداية بس */
+    left: -100px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.5), rgba(168, 85, 247, 0.1));
+    filter: blur(80px);
+    z-index: -1;
+    pointer-events: none;
 }
 
+/* الإيموجيز الجانبية */
+.side-design {
+    position: absolute; /* لازم absolute وليس fixed */
+    top: 150px; /* مكانهم في أول شاشة بس */
+    font-size: 7rem;
+    opacity: 0.3;
+    z-index: -1;
+    pointer-events: none;
+}
 @keyframes float {
-    from { transform: translate(0, 0) rotate(0deg); }
-    to { transform: translate(150px, 100px) rotate(30deg); }
+    from { transform: translate(0, 0); }
+    to { transform: translate(50px, 50px); }
+}
+
+@keyframes sideFloat {
+    from { transform: translateY(0) rotate(-10deg); }
+    to { transform: translateY(-30px) rotate(10deg); }
 }
 
         section {
@@ -111,12 +125,44 @@
             font-weight: bold;
             color: #ef4444;
         }
+        /* تصميم الأشكال الجانبية الجمالية */
+.side-design {
+    position: fixed;
+    top: 40%; /* نزلناهم شوية عشان يكسروا فراغ الجوانب */
+    font-size: 8rem; /* حجم كبير جداً */
+    opacity: 0.4; /* وضوح عالي عشان تشوفيهم */
+    z-index: 1; /* خليناها 1 عشان نضمن إنها فوق الخلفية */
+    pointer-events: none;
+    filter: drop-shadow(0 0 20px rgba(255,255,255,0.2)); /* لمسة إضاءة */
+    animation: sideFloat 6s infinite alternate ease-in-out;
+}
+
+.left-side { left: 2%; }
+.right-side { right: 2%; }
+
+.left-side { left: 3%; } /* قريبة من الحافة اليسار */
+.right-side { right: 3%; } /* قريبة من الحافة اليمين */
+
+.left-side { left: 2%; }
+.right-side { right: 2%; animation-delay: 3s; }
+
+@keyframes sideFloat {
+    from { transform: translateY(-45%) rotate(-10deg); }
+    to { transform: translateY(-55%) rotate(10deg); }
+}
+
+/* إخفاء الأشكال في الشاشات الصغيرة (الجوال) عشان ما تضايق المستخدم */
+@media (max-width: 768px) {
+    .side-design { display: none; }
+}
     </style>
 </head>
 <body>
-<div class="blob"></div>
 
-    <section id="welcome-section">
+   <section id="welcome-section" style="position: relative;">
+        <div class="blob"></div>
+        <div class="side-design left-side">🧠</div>
+        <div class="side-design right-side">⏳</div>
         <h1 style="font-size: 3rem; margin-bottom: 10px;">AntiRot</h1>
         <p style="font-size: 1.5rem; opacity: 0.9;">استعيدي توازن عقلك من التشتت الرقمي</p>
         <br>
