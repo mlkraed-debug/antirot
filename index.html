@@ -155,11 +155,16 @@
 @media (max-width: 768px) {
     .side-design { display: none; }
 }
+button:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
+    transition: 0.3s;
+}
     </style>
 </head>
 <body>
 
-   <section id="welcome-section" style="position: relative;">
+    <section id="welcome-section">
         <div class="blob"></div>
         <div class="side-design left-side">🧠</div>
         <div class="side-design right-side">⏳</div>
@@ -180,6 +185,26 @@
         
         <div id="calcResult" class="result-box"></div>
     </section>
+
+    <div id="swap-card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 30px; max-width: 500px; margin: 40px auto; text-align: center; backdrop-filter: blur(10px); transition: 0.3s;">
+    
+    <div id="suggestion-timer" style="background: #6366f1; display: inline-block; padding: 5px 15px; border-radius: 50px; font-size: 0.9rem; font-weight: bold; color: white;">التحدي القادم ✨</div>
+    
+    <p id="suggestion-text" style="font-size: 1.3rem; margin: 20px 0; min-height: 60px; color: white;">هل أنتِ مستعدة لبديل يجدد نشاطك؟</p>
+    
+    <button onclick="generateSwap()" style="background: linear-gradient(135deg, #6366f1, #a855f7); color: white; border: none; padding: 12px 25px; border-radius: 12px; font-size: 1.1rem; cursor: pointer; transition: 0.2s;">
+        توليد بديل رقمي 💡
+    </button>
+</div>
+
+<div id="boredom-challenge" style="background: linear-gradient(145deg, #1a1a2e, #16213e); border: 2px solid #6366f1; border-radius: 20px; padding: 30px; max-width: 500px; margin: 40px auto; text-align: center; color: white;">
+    <h2 style="color: #a855f7;">⏳ تحدي الملل</h2>
+    <p style="font-size: 0.9rem; opacity: 0.8;">ساعة صيام رقمي: لا شاشات، لا أكل، فقط هدوء.</p>
+    <div id="timer-display" style="font-size: 3rem; font-weight: bold; margin: 20px 0; font-family: monospace;">60:00</div>
+    <button id="start-challenge-btn" onclick="startBoredomTimer()" style="background: #6366f1; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-weight: bold; cursor: pointer;">ابدئي التحدي 🔥</button>
+</div>
+
+<section id="radar-section">
 
     <section id="radar-section">
         <h2 style="font-size: 2.5rem; margin-bottom: 10px;">٢. رادار كيمياء الدماغ</h2>
@@ -262,25 +287,59 @@
         
         // ٣. دالة مولد البدائل
         function generateSwap() {
-            const suggestions = [
-                "اشربي كوباً من الماء ببطء وتركيز 💧",
-                "قومي بترتيب مكتبك لمدة ٥ دقائق فقط 🧹",
-                "ارسمي أي شيء بسيط على ورقة خارجية 🎨",
-                "قومي بتمارين إطالة لجسمك 🧘",
-                "اقرئي صفحتين من كتاب ورقي 📖",
-                "اكتبي ٣ أشياء أنتِ ممتنة لها اليوم ✍️",
-                "تأملي من النافذة لمدة دقيقتين بدون جوال 🪟",
-                "قومي بتنظيف عدسة كاميرا جوالك بعناية ✨"
-            ];
-            const card = document.getElementById('swap-card');
-            const text = document.getElementById('suggestion-text');
-            const timer = document.getElementById('suggestion-timer');
-            card.style.transform = "scale(1.05)";
-            const randomIndex = Math.floor(Math.random() * suggestions.length);
-            text.innerText = suggestions[randomIndex];
-            timer.innerText = "التحدي لمدة: ١٠ دقائق";
-            setTimeout(() => { card.style.transform = "scale(1)"; }, 200);
+    const suggestions = [
+        "💧 اشربي كوباً من الماء ببطء وتركيز",
+        "🧹 قومي بترتيب مكتبك لمدة 5 دقائق فقط",
+        "🎨 ارسمي أي شيء بسيط على ورقة خارجية",
+        "🧘 قومي بتمارين إطالة لجسمك",
+        "📖 اقرئي صفحتين من كتاب ورقي",
+        "✍️ اكتبي 3 أشياء أنتِ ممتنة لها اليوم",
+        "🪟 تأملي من النافذة لمدة دقيقتين بدون جوال",
+        "✨ قومي بتنظيف عدسة كاميرا جوالك بعناية"
+    ];
+
+    const card = document.getElementById('swap-card');
+    const text = document.getElementById('suggestion-text');
+    const timer = document.getElementById('suggestion-timer');
+
+    if (card && text && timer) {
+        card.style.transform = "scale(1.05)";
+        const randomIndex = Math.floor(Math.random() * suggestions.length);
+        text.innerText = suggestions[randomIndex];
+        timer.innerText = "التحدي لمدة: 10 دقائق";
+        
+        setTimeout(() => { card.style.transform = "scale(1)"; }, 200);
+    } else {
+        console.error("أحد العناصر غير موجود في الـ HTML! تأكدي من الـ IDs");
+    }
+}
+let timerInterval;
+function startBoredomTimer() {
+    let timeLeft = 60 * 60; // 60 دقيقة بالثواني
+    const display = document.getElementById('timer-display');
+    const btn = document.getElementById('start-challenge-btn');
+    
+    btn.disabled = true;
+    btn.innerText = "التحدي مستمر... لا تستسلمي!";
+    btn.style.background = "#444";
+
+    timerInterval = setInterval(() => {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+
+        display.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            display.innerText = "بطلة! 🎉";
+            alert("مبروك! لقد أتممتِ ساعة من الصيام الرقمي بنجاح.");
+            btn.disabled = false;
+            btn.innerText = "ابدئي تحدي جديد";
         }
+        timeLeft--;
+    }, 1000);
+}
+
     </script>
     <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
         style="position: fixed; bottom: 20px; left: 20px; background: #6366f1; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 100;">
